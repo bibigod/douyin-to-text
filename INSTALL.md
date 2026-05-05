@@ -40,8 +40,10 @@ python --version
 继续在那个蓝色 PowerShell 窗口里，**复制下面这行**，粘贴进去回车：
 
 ```powershell
-pip install "douyin-to-text[ui]"
+pip install "git+https://github.com/bibigod/douyin-to-text.git#egg=douyin-to-text[ui]"
 ```
+
+> 💡 后面 `git+https://...` 那一长串是因为我们还没发布到 PyPI。等正式发布之后，命令会简化成 `pip install "douyin-to-text[ui]"`。复制粘贴就行，不用懂语法。
 
 等它跑完（屏幕会刷一堆字，正常）。
 

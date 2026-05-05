@@ -6,7 +6,7 @@
 
 中文短视频专用的本地化转写工具。基于阿里云 Qwen Paraformer，自带 LLM 一键总结。
 
-[![PyPI](https://img.shields.io/pypi/v/douyin-to-text?color=%237c3aed&label=pypi)](https://pypi.org/project/douyin-to-text/)
+[![Release](https://img.shields.io/github/v/release/bibigod/douyin-to-text?color=%237c3aed&label=release)](https://github.com/bibigod/douyin-to-text/releases)
 [![Python](https://img.shields.io/badge/python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-22c55e)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/bibigod/douyin-to-text?style=flat&color=f59e0b)](https://github.com/bibigod/douyin-to-text/stargazers)
@@ -47,8 +47,8 @@ $ douyin-to-text "https://v.douyin.com/xxx/" --summary
 ## 🚀 30 秒上手
 
 ```bash
-# 1. 装包（带 Web UI）
-pip install "douyin-to-text[ui]"
+# 1. 直接从 GitHub 装（带 Web UI；PyPI 即将上架）
+pip install "git+https://github.com/bibigod/douyin-to-text.git#egg=douyin-to-text[ui]"
 playwright install chromium
 
 # 2. 拿一个免费 API Key：https://dashscope.aliyun.com/
@@ -58,6 +58,8 @@ $env:DASHSCOPE_API_KEY="sk-xxxx"       # Windows PowerShell
 # 3. 跑！
 douyin-to-text "https://v.douyin.com/xxx/" --summary
 ```
+
+> 💡 还要用 `git+https` 装是因为 PyPI 还没发。一旦发上 PyPI，会换成 `pip install douyin-to-text`。
 
 > 🤓 **完全不懂编程？** 看这份手把手图文教程 → [INSTALL.md](INSTALL.md)
 
