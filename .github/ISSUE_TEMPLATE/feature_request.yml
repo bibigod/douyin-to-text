@@ -1,0 +1,29 @@
+name: Feature request
+description: Suggest an idea
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening, please skim the **设计边界** section in README —
+        we explicitly do not accept: batch scraping, login bypass, SaaS
+        deployment, or auto-republish features. Those will be closed.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      placeholder: "I want to ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      placeholder: "It could work like ..."
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

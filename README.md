@@ -32,6 +32,21 @@ douyin-to-text "https://v.douyin.com/xxxxxx/"
 
 短视频场景下 Paraformer 是更优解，Whisper 仍然是英文/多语种之王。
 
+## 输出长这样
+
+```text
+$ douyin-to-text "https://v.douyin.com/xxxxxx/"
+[1/3] fetching mp4 from https://v.douyin.com/xxxxxx/ ...
+[2/3] extracting audio + streaming to Paraformer ...
+  · 大家好，今天我们来聊一个特别有意思的话题。
+  · 就是关于人工智能在日常生活中的应用。
+  · 你看现在很多人都在用各种 AI 工具来提高效率。
+  ...
+[3/3] done. transcript -> ./transcripts/2026-05-05_某视频标题.txt
+```
+
+完整示例见 [`examples/sample_transcript.txt`](examples/sample_transcript.txt)。
+
 ## 安装
 
 ```bash

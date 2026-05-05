@@ -1,0 +1,57 @@
+name: Bug report
+description: Something isn't working as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please fill in as much detail as possible —
+        especially the failing URL pattern, since Douyin CDN domains change
+        and that's our #1 cause of breakage.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `douyin-to-text --version`
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What command did you run, what did you expect, what actually happened?
+      placeholder: |
+        Ran: douyin-to-text "https://v.douyin.com/xxxxx/"
+        Expected: transcript output
+        Actual: RuntimeError: No mp4 URL captured
+    validations:
+      required: true
+
+  - type: textarea
+    id: url-pattern
+    attributes:
+      label: Failing URL (sanitized OK)
+      description: |
+        If safe to share, paste the failing URL or its pattern.
+        You may redact the unique ID — we mostly need to see the host.
+      placeholder: "https://v.douyin.com/xxxxxx/  (or just the host pattern)"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Full traceback
+      render: shell

@@ -27,15 +27,16 @@ def main() -> int:
         print("        get one at https://dashscope.aliyun.com/", file=sys.stderr)
         return 2
 
-    print(f"[1/2] fetching mp4 from {args.url} ...")
+    print(f"[1/3] fetching mp4 from {args.url} ...")
+    print("[2/3] extracting audio + streaming to Paraformer ...")
     result = transcribe_url(
         args.url,
         out_dir=args.out,
         on_sentence=lambda s: print(f"  · {s}"),
         keep_media=args.keep_media,
     )
-    print(f"\n[done] transcript -> {result.output_path}")
-    print(f"       raw assets -> {result.raw_dir}")
+    print(f"\n[3/3] done. transcript -> {result.output_path}")
+    print(f"      raw assets    -> {result.raw_dir}")
     return 0
 
 
