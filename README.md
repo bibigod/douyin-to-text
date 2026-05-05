@@ -50,7 +50,13 @@ $ douyin-to-text "https://v.douyin.com/xxxxxx/"
 ## 安装
 
 ```bash
+# CLI 版（最小依赖）
 pip install douyin-to-text
+
+# 带本地 Web UI
+pip install "douyin-to-text[ui]"
+
+# 安装完都要再跑一次：
 playwright install chromium
 ```
 
@@ -90,6 +96,18 @@ douyin-to-text "https://v.douyin.com/xxxxxx/" --out ./transcripts
 
 总结失败不会影响转写——txt 一定会落地，md 才可能跳过。
 
+## 本地 Web UI
+
+不想敲命令？装了 `[ui]` extras 后：
+
+```bash
+douyin-to-text-ui
+```
+
+浏览器自动打开 http://127.0.0.1:7860/ ，粘贴链接 → 勾选总结 → 点按钮就行。
+
+> ⚠️ 这个 UI **只绑 127.0.0.1**，不要改成 `0.0.0.0` 或开 `share=True` 暴露到公网——一旦做成公开服务就脱离了本工具的合规边界（详见 README 免责声明 / yt-dlp 汉堡案先例）。
+
 ## 设计边界（明确不做的事）
 
 为了把工具的合规风险压到最低，下面这些功能**不会**被加进来，issue/PR 也不会被接受：
@@ -102,7 +120,7 @@ douyin-to-text "https://v.douyin.com/xxxxxx/" --out ./transcripts
 
 会做的：
 - [x] ~~一键 LLM 总结（接 Qwen / Claude / 本地模型可选）~~ ✅ v0.2.0 已加入 `--summary`
-- [ ] 本地 Gradio UI（仅供本机使用）
+- [x] ~~本地 Gradio UI（仅供本机使用）~~ ✅ v0.3.0 已加入 `douyin-to-text-ui`
 - [ ] 其他平台 fetcher（B 站、小红书），同样遵守上述边界
 
 ## ⚠️ 免责声明 / Disclaimer

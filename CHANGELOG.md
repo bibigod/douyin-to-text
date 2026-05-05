@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-05-05
+
+### Added
+- Local Gradio Web UI: `douyin-to-text-ui` (binds 127.0.0.1 only)
+- New extras: `pip install "douyin-to-text[ui]"` for the UI
+- First PyPI release — installable via `pip install douyin-to-text`
+
+### Notes
+- Tested against Gradio 6.x; theme is passed to `launch()` per Gradio 6 API change
+- The UI deliberately does not expose `share=True` — keeping the project on the
+  "tool, not service" side of the legal posture
+
 ## [0.2.0] - 2026-05-05
 
 ### Added
@@ -31,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Smoke tests for pure helpers
 - GitHub Actions CI: ruff lint + pytest
 
-[Unreleased]: https://github.com/bibigod/douyin-to-text/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/bibigod/douyin-to-text/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/bibigod/douyin-to-text/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bibigod/douyin-to-text/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/bibigod/douyin-to-text/releases/tag/v0.1.0

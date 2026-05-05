@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "douyin-to-text"
-version = "0.2.0"
+version = "0.3.0"
 description = "Transcribe Douyin videos to Chinese text via Qwen Paraformer streaming ASR."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -27,7 +27,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["ruff", "pytest"]
+ui = ["gradio>=4.0"]
+dev = ["ruff", "pytest", "build", "twine"]
 
 [project.urls]
 Homepage = "https://github.com/bibigod/douyin-to-text"
@@ -35,6 +36,7 @@ Issues = "https://github.com/bibigod/douyin-to-text/issues"
 
 [project.scripts]
 douyin-to-text = "douyin_to_text.cli:main"
+douyin-to-text-ui = "douyin_to_text.web:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/douyin_to_text"]
