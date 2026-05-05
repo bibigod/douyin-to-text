@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "douyin-to-text"
+version = "0.1.0"
+description = "Transcribe Douyin videos to Chinese text via Qwen Paraformer streaming ASR."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "douyin-to-text contributors" }]
+keywords = ["douyin", "tiktok", "asr", "transcription", "paraformer", "qwen"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "dashscope>=1.20.0",
+    "playwright>=1.40.0",
+    "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+dev = ["ruff", "pytest"]
+
+[project.urls]
+Homepage = "https://github.com/bibigod/douyin-to-text"
+Issues = "https://github.com/bibigod/douyin-to-text/issues"
+
+[project.scripts]
+douyin-to-text = "douyin_to_text.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/douyin_to_text"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
