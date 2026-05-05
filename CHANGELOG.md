@@ -39,8 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Local Gradio Web UI: `douyin-to-text-ui` (binds 127.0.0.1 only)
-- New extras: `pip install "douyin-to-text[ui]"` for the UI
-- First PyPI release — installable via `pip install douyin-to-text`
+- New extras: `[ui]` group brings in Gradio when needed
+- First wheel/sdist build artifacts produced (not yet published to any index)
 
 ### Notes
 - Tested against Gradio 6.x; theme is passed to `launch()` per Gradio 6 API change

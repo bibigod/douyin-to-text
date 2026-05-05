@@ -35,25 +35,26 @@ python --version
 
 ---
 
-## 第二步：装 douyin-to-text（2 分钟）
+## 第二步：下载 douyin-to-text（2 分钟）
 
-继续在那个蓝色 PowerShell 窗口里，**复制下面这行**，粘贴进去回车：
-
-```powershell
-pip install "git+https://github.com/bibigod/douyin-to-text.git#egg=douyin-to-text[ui]"
-```
-
-> 💡 后面 `git+https://...` 那一长串是因为我们还没发布到 PyPI。等正式发布之后，命令会简化成 `pip install "douyin-to-text[ui]"`。复制粘贴就行，不用懂语法。
-
-等它跑完（屏幕会刷一堆字，正常）。
-
-接着再粘贴这一行回车：
+继续在那个蓝色 PowerShell 窗口里，**一行一行**复制粘贴回车：
 
 ```powershell
+git clone https://github.com/bibigod/douyin-to-text.git
+cd douyin-to-text
+pip install -e ".[ui]"
 playwright install chromium
 ```
 
-这是装一个隐形浏览器，工具用它去抖音抓视频。
+四行的意思是：
+
+1. 把项目从 GitHub 下到当前文件夹
+2. 进到这个文件夹
+3. 安装它（屏幕会刷一堆字，正常）
+4. 装一个隐形浏览器，工具用它去抖音抓视频
+
+> 💡 没装 `git`？去 https://git-scm.com/download/win 下载安装一次（一路 Next 即可）。
+> 之后每次跑工具，都要先 `cd` 回到 `douyin-to-text` 这个文件夹再启动。
 
 ---
 

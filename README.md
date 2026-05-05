@@ -47,8 +47,10 @@ $ douyin-to-text "https://v.douyin.com/xxx/" --summary
 ## 🚀 30 秒上手
 
 ```bash
-# 1. 直接从 GitHub 装（带 Web UI；PyPI 即将上架）
-pip install "git+https://github.com/bibigod/douyin-to-text.git#egg=douyin-to-text[ui]"
+# 1. 克隆并安装（带 Web UI 版）
+git clone https://github.com/bibigod/douyin-to-text.git
+cd douyin-to-text
+pip install -e ".[ui]"
 playwright install chromium
 
 # 2. 拿一个免费 API Key：https://dashscope.aliyun.com/
@@ -58,8 +60,6 @@ $env:DASHSCOPE_API_KEY="sk-xxxx"       # Windows PowerShell
 # 3. 跑！
 douyin-to-text "https://v.douyin.com/xxx/" --summary
 ```
-
-> 💡 还要用 `git+https` 装是因为 PyPI 还没发。一旦发上 PyPI，会换成 `pip install douyin-to-text`。
 
 > 🤓 **完全不懂编程？** 看这份手把手图文教程 → [INSTALL.md](INSTALL.md)
 
