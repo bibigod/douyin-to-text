@@ -5,6 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
+> 🆕 **完全不懂编程？** 看 [10 分钟零基础上手指南 →](INSTALL.md)
+
 ---
 
 ## 这个工具是什么

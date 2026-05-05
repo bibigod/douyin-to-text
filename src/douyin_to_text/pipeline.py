@@ -32,6 +32,7 @@ def transcribe_url(
     url: str,
     out_dir: Path | str = "./transcripts",
     on_sentence=None,
+    on_stage=None,
     keep_media: bool = False,
     summarize: bool = False,
 ) -> TranscribeResult:
@@ -50,12 +51,18 @@ def transcribe_url(
             Reuses DASHSCOPE_API_KEY. If the LLM call fails, the transcript
             still succeeds; the error is attached but not raised.
     """
+    def _stage(name: str):
+        if on_stage:
+            on_stage(name)
+
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     raw_dir = out_dir / ".raw" / uuid.uuid4().hex[:10]
     raw_dir.mkdir(parents=True, exist_ok=True)
 
+    _stage("fetching")
     mp4, page_title = fetch_mp4(url, raw_dir)
+    _stage("transcribing")
     mp3 = mp4_to_mp3(mp4)
     text = transcribe_mp3(mp3, on_sentence=on_sentence)
 
@@ -78,6 +85,7 @@ def transcribe_url(
     summary: str | None = None
     summary_path: Path | None = None
     if summarize:
+        _stage("summarizing")
         try:
             summary = summarize_transcript(text)
             summary_path = out_path.with_suffix(".md")

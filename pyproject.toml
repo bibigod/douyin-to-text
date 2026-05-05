@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "douyin-to-text"
-version = "0.3.0"
+version = "0.4.0"
 description = "Transcribe Douyin videos to Chinese text via Qwen Paraformer streaming ASR."
 readme = "README.md"
 license = { file = "LICENSE" }

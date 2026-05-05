@@ -16,5 +16,8 @@ transcripts/
 *.mp4
 *.mp3
 
+# Local user config (lives in ~/.douyin-to-text, not in repo, but be safe)
+.douyin-to-text/
+
 # AI agent instructions — kept local, not published
 CLAUDE.md
