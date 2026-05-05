@@ -71,8 +71,11 @@ $env:DASHSCOPE_API_KEY="sk-xxxx"
 ## 使用
 
 ```bash
-# 单条
+# 仅转写
 douyin-to-text "https://v.douyin.com/xxxxxx/"
+
+# 转写 + LLM 总结成 Markdown（复用同一个 DASHSCOPE_API_KEY，调 qwen-plus）
+douyin-to-text "https://v.douyin.com/xxxxxx/" --summary
 
 # 指定输出目录
 douyin-to-text "https://v.douyin.com/xxxxxx/" --out ./transcripts
@@ -81,8 +84,11 @@ douyin-to-text "https://v.douyin.com/xxxxxx/" --out ./transcripts
 输出：
 
 ```
-./transcripts/2026-05-05_视频标题.txt
+./transcripts/2026-05-05_视频标题.txt   # 逐句转写
+./transcripts/2026-05-05_视频标题.md    # （加 --summary 时）一句话概括 + 核心要点 + 实用信息
 ```
+
+总结失败不会影响转写——txt 一定会落地，md 才可能跳过。
 
 ## 设计边界（明确不做的事）
 
@@ -95,7 +101,7 @@ douyin-to-text "https://v.douyin.com/xxxxxx/" --out ./transcripts
 - ❌ 视频持久化存储（默认转写完立即删除 mp4/mp3）
 
 会做的：
-- [ ] 一键 LLM 总结（接 Qwen / Claude / 本地模型可选，仍由用户自付 API）
+- [x] ~~一键 LLM 总结（接 Qwen / Claude / 本地模型可选）~~ ✅ v0.2.0 已加入 `--summary`
 - [ ] 本地 Gradio UI（仅供本机使用）
 - [ ] 其他平台 fetcher（B 站、小红书），同样遵守上述边界
 

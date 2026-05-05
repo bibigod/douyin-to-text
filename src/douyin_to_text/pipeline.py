@@ -8,6 +8,7 @@ from pathlib import Path
 
 from douyin_to_text.asr import mp4_to_mp3, transcribe_mp3
 from douyin_to_text.fetcher import fetch_mp4
+from douyin_to_text.summarize import summarize_transcript
 
 
 def _sanitize(name: str, max_len: int = 40) -> str:
@@ -23,6 +24,8 @@ class TranscribeResult:
     output_path: Path
     raw_dir: Path
     page_title: str
+    summary: str | None = None
+    summary_path: Path | None = None
 
 
 def transcribe_url(
@@ -30,6 +33,7 @@ def transcribe_url(
     out_dir: Path | str = "./transcripts",
     on_sentence=None,
     keep_media: bool = False,
+    summarize: bool = False,
 ) -> TranscribeResult:
     """Download a Douyin video, transcribe its audio, save as txt.
 
@@ -42,6 +46,9 @@ def transcribe_url(
         out_dir: directory to write the readable .txt into.
         on_sentence: optional callback(str) for live sentence streaming.
         keep_media: if True, keep mp4/mp3 in raw_dir; default False (deleted).
+        summarize: if True, call Qwen to write a Markdown summary alongside.
+            Reuses DASHSCOPE_API_KEY. If the LLM call fails, the transcript
+            still succeeds; the error is attached but not raised.
     """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -68,4 +75,23 @@ def transcribe_url(
     out_path = out_dir / f"{today}_{slug}.txt"
     out_path.write_text(text, encoding="utf-8")
 
-    return TranscribeResult(text=text, output_path=out_path, raw_dir=raw_dir, page_title=page_title)
+    summary: str | None = None
+    summary_path: Path | None = None
+    if summarize:
+        try:
+            summary = summarize_transcript(text)
+            summary_path = out_path.with_suffix(".md")
+            header = f"# {page_title}\n\n> 来源: {url}\n\n" if page_title else f"> 来源: {url}\n\n"
+            summary_path.write_text(header + summary, encoding="utf-8")
+        except Exception as e:
+            # transcription is the main deliverable — summary failure is non-fatal
+            summary = f"(summary failed: {e})"
+
+    return TranscribeResult(
+        text=text,
+        output_path=out_path,
+        raw_dir=raw_dir,
+        page_title=page_title,
+        summary=summary,
+        summary_path=summary_path,
+    )

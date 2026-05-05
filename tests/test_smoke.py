@@ -39,3 +39,20 @@ def test_sanitize_truncates():
 def test_sanitize_empty_fallback():
     assert _sanitize("") == "untitled"
     assert _sanitize("///") == "untitled"
+
+
+def test_summary_prompt_includes_transcript():
+    from douyin_to_text.summarize import build_prompt
+
+    p = build_prompt("hello world")
+    assert "hello world" in p
+    assert "Markdown" in p
+    assert "一句话概括" in p
+
+
+def test_summary_prompt_strips_whitespace():
+    from douyin_to_text.summarize import build_prompt
+
+    a = build_prompt("  abc  ")
+    b = build_prompt("abc")
+    assert a == b

@@ -19,6 +19,10 @@ def main() -> int:
         "--keep-media", action="store_true",
         help="keep downloaded mp4/mp3 (default: deleted after transcription)",
     )
+    parser.add_argument(
+        "--summary", action="store_true",
+        help="also produce a Markdown summary via Qwen (reuses DASHSCOPE_API_KEY)",
+    )
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     args = parser.parse_args()
 
@@ -27,16 +31,25 @@ def main() -> int:
         print("        get one at https://dashscope.aliyun.com/", file=sys.stderr)
         return 2
 
-    print(f"[1/3] fetching mp4 from {args.url} ...")
-    print("[2/3] extracting audio + streaming to Paraformer ...")
+    total = 4 if args.summary else 3
+    print(f"[1/{total}] fetching mp4 from {args.url} ...")
+    print(f"[2/{total}] extracting audio + streaming to Paraformer ...")
+    if args.summary:
+        print(f"[3/{total}] (summary will be generated after transcription) ...")
     result = transcribe_url(
         args.url,
         out_dir=args.out,
         on_sentence=lambda s: print(f"  · {s}"),
         keep_media=args.keep_media,
+        summarize=args.summary,
     )
-    print(f"\n[3/3] done. transcript -> {result.output_path}")
-    print(f"      raw assets    -> {result.raw_dir}")
+    print(f"\n[{total}/{total}] done.")
+    print(f"      transcript -> {result.output_path}")
+    if result.summary_path:
+        print(f"      summary    -> {result.summary_path}")
+    elif args.summary:
+        print(f"      summary    -> {result.summary}")
+    print(f"      raw assets -> {result.raw_dir}")
     return 0
 
 
