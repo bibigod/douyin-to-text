@@ -56,3 +56,8 @@ def test_summary_prompt_strips_whitespace():
     a = build_prompt("  abc  ")
     b = build_prompt("abc")
     assert a == b
+
+
+def test_transcribe_file_importable():
+    from douyin_to_text.pipeline import transcribe_file
+    assert callable(transcribe_file)

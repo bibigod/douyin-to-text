@@ -2,6 +2,6 @@
 
 __version__ = "0.4.0"
 
-from douyin_to_text.pipeline import transcribe_url
+from douyin_to_text.pipeline import transcribe_url, transcribe_file
 
-__all__ = ["transcribe_url", "__version__"]
+__all__ = ["transcribe_url", "transcribe_file", "__version__"]
