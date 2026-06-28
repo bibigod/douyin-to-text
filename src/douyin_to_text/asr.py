@@ -6,11 +6,16 @@ from pathlib import Path
 from dashscope.audio.asr import Recognition, RecognitionCallback, RecognitionResult
 
 
-def mp4_to_mp3(mp4: Path) -> Path:
-    """Extract 16kHz mono mp3 audio track via ffmpeg."""
-    mp3 = mp4.with_suffix(".mp3")
+def mp4_to_mp3(source: Path, output: Path | None = None) -> Path:
+    """Extract 16kHz mono mp3 audio track via ffmpeg.
+
+    Args:
+        source: Input video or audio file.
+        output: Destination path for the mp3. Defaults to source.with_suffix('.mp3').
+    """
+    mp3 = output if output is not None else source.with_suffix(".mp3")
     subprocess.run(
-        ["ffmpeg", "-y", "-i", str(mp4), "-vn", "-ar", "16000", "-ac", "1",
+        ["ffmpeg", "-y", "-i", str(source), "-vn", "-ar", "16000", "-ac", "1",
          "-codec:a", "libmp3lame", "-q:a", "5", str(mp3)],
         check=True, capture_output=True,
     )
