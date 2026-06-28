@@ -59,5 +59,5 @@ def test_summary_prompt_strips_whitespace():
 
 
 def test_transcribe_file_importable():
-    from douyin_to_text.pipeline import transcribe_file
+    from douyin_to_text import transcribe_file
     assert callable(transcribe_file)
