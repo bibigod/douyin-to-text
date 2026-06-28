@@ -61,3 +61,19 @@ def test_summary_prompt_strips_whitespace():
 def test_transcribe_file_importable():
     from douyin_to_text import transcribe_file
     assert callable(transcribe_file)
+
+
+def test_sanitize_with_file_stems():
+    """Common file stems should produce readable slugs."""
+    assert _sanitize("会议录制") == "会议录制"
+    assert _sanitize("meeting-2024") == "meeting-2024"
+    assert _sanitize("video (1)") == "video_(1)"
+    assert _sanitize("C:/Users/test/video") == "CUserstestvideo"
+    assert _sanitize("你好世界.mp4") == "你好世界.mp4"
+
+
+def test_sanitize_trailing_dashes_and_underscores():
+    """Trailing separators should be stripped."""
+    assert _sanitize("hello---") == "hello"
+    assert _sanitize("hello___") == "hello"
+    assert _sanitize("hello_-_") == "hello"
