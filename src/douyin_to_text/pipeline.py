@@ -28,6 +28,40 @@ class TranscribeResult:
     summary_path: Path | None = None
 
 
+def _transcribe_media(
+    source_path: Path,
+    raw_dir: Path,
+    *,
+    keep_media: bool = False,
+    on_sentence=None,
+) -> str:
+    """Extract audio and transcribe from a local media file.
+
+    The source file is never moved or deleted. The extracted mp3 is placed
+    inside raw_dir and cleaned up after transcription (unless keep_media).
+
+    Args:
+        source_path: Path to a video or audio file.
+        raw_dir: Existing work directory for intermediate files.
+        keep_media: If True, keep the extracted mp3.
+        on_sentence: Optional callback(str) for live sentence streaming.
+
+    Returns:
+        Transcribed text, one sentence per line.
+    """
+    mp3 = mp4_to_mp3(source_path, output=raw_dir / "audio.mp3")
+    text = transcribe_mp3(mp3, on_sentence=on_sentence)
+    (raw_dir / "transcript.txt").write_text(text, encoding="utf-8")
+
+    if not keep_media:
+        try:
+            mp3.unlink()
+        except OSError:
+            pass
+
+    return text
+
+
 def transcribe_url(
     url: str,
     out_dir: Path | str = "./transcripts",
@@ -62,20 +96,18 @@ def transcribe_url(
 
     _stage("fetching")
     mp4, page_title = fetch_mp4(url, raw_dir)
-    _stage("transcribing")
-    mp3 = mp4_to_mp3(mp4)
-    text = transcribe_mp3(mp3, on_sentence=on_sentence)
 
-    (raw_dir / "transcript.txt").write_text(text, encoding="utf-8")
+    _stage("transcribing")
+    text = _transcribe_media(mp4, raw_dir, keep_media=keep_media, on_sentence=on_sentence)
+
     (raw_dir / "source_url.txt").write_text(url, encoding="utf-8")
     (raw_dir / "page_title.txt").write_text(page_title, encoding="utf-8")
 
     if not keep_media:
-        for f in (mp4, mp3):
-            try:
-                f.unlink()
-            except OSError:
-                pass
+        try:
+            mp4.unlink()
+        except OSError:
+            pass
 
     today = datetime.date.today().isoformat()
     slug = _sanitize(page_title) if page_title else raw_dir.name
