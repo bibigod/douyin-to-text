@@ -2,9 +2,9 @@
 
 # 🎬 douyin-to-text
 
-**抖音视频 → 中文文字稿，30 秒搞定。**
+**抖音视频 / 本地音视频 → 中文文字稿，30 秒搞定。**
 
-中文短视频专用的本地化转写工具。基于阿里云 Qwen Paraformer，自带 LLM 一键总结。
+中文短视频 & 本地媒体专用的转写工具。基于阿里云 Qwen Paraformer，自带 LLM 一键总结。
 
 [![Release](https://img.shields.io/github/v/release/bibigod/douyin-to-text?color=%237c3aed&label=release)](https://github.com/bibigod/douyin-to-text/releases)
 [![Python](https://img.shields.io/badge/python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
@@ -18,7 +18,8 @@
 <br />
 
 ```bash
-$ douyin-to-text "https://v.douyin.com/xxx/" --summary
+# 从抖音链接
+$ douyin-to-text url "https://v.douyin.com/xxx/" --summary
 
 📥 [1/3] 抓取视频...
 🎙️ [2/3] 流式转写中...
@@ -27,6 +28,14 @@ $ douyin-to-text "https://v.douyin.com/xxx/" --summary
   · ...
 🧠 [3/3] LLM 总结中...
 ✅ 完成 → 2026-05-05_xxx.txt + 2026-05-05_xxx.md
+
+# 或直接用本地文件
+$ douyin-to-text file ~/Videos/会议录制.mp4 --summary
+
+🎙️ [1/2] 流式转写中...
+  · 今天和大家同步一下本周进度...
+🧠 [2/2] LLM 总结中...
+✅ 完成 → 2026-06-28_会议录制.txt + 2026-06-28_会议录制.md
 ```
 
 <br />
@@ -38,6 +47,7 @@ $ douyin-to-text "https://v.douyin.com/xxx/" --summary
 ⚡  几乎实时    ·  流式 API，30 秒转完一条 1 分钟视频
 💰 几乎免费    ·  阿里云 DashScope 有免费额度，正常用一个月也用不完
 🧠 自带总结    ·  --summary 一键出 Markdown 笔记：一句话概括 + 核心要点
+📁 也有本地文件  ·  不仅限抖音链接，本地的 mp4 / mov / mp3 / wav 都能直接转
 🪶 没有 GPU 也行 ·  本地不跑模型，云端流式调用
 🌐 还有 Web UI  ·  不想敲命令？douyin-to-text-ui 起本地浏览器界面
 ```
@@ -58,7 +68,8 @@ export DASHSCOPE_API_KEY=sk-xxxx       # macOS / Linux
 $env:DASHSCOPE_API_KEY="sk-xxxx"       # Windows PowerShell
 
 # 3. 跑！
-douyin-to-text "https://v.douyin.com/xxx/" --summary
+douyin-to-text url "https://v.douyin.com/xxx/" --summary   # 从抖音链接
+douyin-to-text file ~/Videos/会议.mp4 --summary             # 从本地文件
 ```
 
 > 🤓 **完全不懂编程？** 看这份手把手图文教程 → [INSTALL.md](INSTALL.md)
@@ -70,9 +81,15 @@ douyin-to-text "https://v.douyin.com/xxx/" --summary
 ### A. 命令行（极客喜欢）
 
 ```bash
-douyin-to-text "https://v.douyin.com/xxx/"               # 仅转写
-douyin-to-text "https://v.douyin.com/xxx/" --summary     # 转写 + LLM 总结
-douyin-to-text "https://v.douyin.com/xxx/" --out ~/notes # 自选目录
+# 从抖音链接（需 Playwright 抓取视频）
+douyin-to-text url "https://v.douyin.com/xxx/"               # 仅转写
+douyin-to-text url "https://v.douyin.com/xxx/" --summary     # 转写 + LLM 总结
+douyin-to-text url "https://v.douyin.com/xxx/" --out ~/notes # 自选目录
+
+# 从本地文件（支持 .mp4 / .mov / .mp3 / .wav / …）
+douyin-to-text file ~/Videos/会议录制.mp4                    # 仅转写
+douyin-to-text file ~/Videos/会议录制.mp4 --summary          # 转写 + LLM 总结
+douyin-to-text file ~/Videos/会议录制.mp4 --title "周会纪要"  # 自定义输出标题
 ```
 
 ### B. 本地 Web UI（普通人）
@@ -81,7 +98,9 @@ douyin-to-text "https://v.douyin.com/xxx/" --out ~/notes # 自选目录
 douyin-to-text-ui
 ```
 
-浏览器自动打开 http://127.0.0.1:7860/ → 粘贴链接 → 点开始 → 喝杯水回来就好了。
+浏览器自动打开 http://127.0.0.1:7860/ → 粘贴抖音链接 → 点开始 → 喝杯水回来就好了。
+
+> 💡 Web UI 目前仅支持抖音链接。本地文件请用命令行 `douyin-to-text file`。
 
 API Key 填一次自动记住，下次免输。
 
@@ -123,6 +142,7 @@ API Key 填一次自动记住，下次免输。
 - ✅ v0.2.0 — `--summary` 一键 LLM 总结
 - ✅ v0.3.0 — 本地 Gradio Web UI
 - ✅ v0.4.0 — API Key 持久化、实时进度、排版优化、傻瓜式安装指南
+- ✅ v0.5.0 — 本地视频/音频文件直接转写（`file` 子命令），纯音频也支持
 - ⏳ 其他平台 fetcher（B 站、小红书）——同样遵守"不批量、不绕登录"边界
 
 </details>
