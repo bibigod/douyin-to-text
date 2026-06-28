@@ -1,5 +1,10 @@
 """Smoke tests — pure-function only. Network/API tests live elsewhere."""
 
+import subprocess
+import tempfile
+import wave
+from pathlib import Path
+
 from douyin_to_text import __version__, transcribe_url
 from douyin_to_text.pipeline import _sanitize
 
@@ -56,3 +61,57 @@ def test_summary_prompt_strips_whitespace():
     a = build_prompt("  abc  ")
     b = build_prompt("abc")
     assert a == b
+
+
+def test_transcribe_file_importable():
+    from douyin_to_text import transcribe_file
+    assert callable(transcribe_file)
+
+
+def test_sanitize_with_file_stems():
+    """Common file stems should produce readable slugs."""
+    assert _sanitize("会议录制") == "会议录制"
+    assert _sanitize("meeting-2024") == "meeting-2024"
+    assert _sanitize("video (1)") == "video_(1)"
+    assert _sanitize("C:/Users/test/video") == "CUserstestvideo"
+    assert _sanitize("你好世界.mp4") == "你好世界.mp4"
+
+
+def test_sanitize_trailing_dashes_and_underscores():
+    """Trailing separators should be stripped."""
+    assert _sanitize("hello---") == "hello"
+    assert _sanitize("hello___") == "hello"
+    assert _sanitize("hello_-_") == "hello"
+
+
+def _ffmpeg_available() -> bool:
+    """Check if ffmpeg is on PATH and can be invoked."""
+    try:
+        subprocess.run(["ffmpeg", "-version"], capture_output=True, check=True)
+        return True
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return False
+
+
+def test_mp4_to_mp3_accepts_audio():
+    """mp4_to_mp3 should convert a pure audio file (wav) to mp3."""
+    if not _ffmpeg_available():
+        import pytest
+        pytest.skip("ffmpeg not available")
+
+    from douyin_to_text.asr import mp4_to_mp3
+
+    with tempfile.TemporaryDirectory() as td:
+        wav_path = Path(td) / "test.wav"
+        # Generate a minimal valid WAV: 1 second of silence, 16kHz mono 16-bit
+        sample_rate = 16000
+        num_samples = sample_rate  # 1 second
+        with wave.open(str(wav_path), "w") as wf:
+            wf.setnchannels(1)
+            wf.setsampwidth(2)  # 16-bit
+            wf.setframerate(sample_rate)
+            wf.writeframes(b"\x00\x00" * num_samples)
+
+        mp3 = mp4_to_mp3(wav_path, output=Path(td) / "out.mp3")
+        assert mp3.exists()
+        assert mp3.stat().st_size > 0

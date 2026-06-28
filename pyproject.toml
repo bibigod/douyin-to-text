@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "douyin-to-text"
-version = "0.4.0"
-description = "Transcribe Douyin videos to Chinese text via Qwen Paraformer streaming ASR."
+version = "0.5.0"
+description = "Transcribe Douyin videos and local media files to Chinese text via Qwen Paraformer streaming ASR."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
@@ -40,6 +40,10 @@ douyin-to-text-ui = "douyin_to_text.web:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/douyin_to_text"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 100
