@@ -1,6 +1,7 @@
-"""Playwright-based mp4 URL sniffer for Douyin video pages."""
+"""Download media from Douyin and Bilibili video links."""
 
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import httpx
 
@@ -9,6 +10,54 @@ UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 )
+
+
+def fetch_media(target_url: str, raw_dir: Path) -> tuple[Path, str]:
+    url = urlsplit(target_url)
+    host = (url.hostname or "").rstrip(".")
+    if url.scheme in ("https", "http") and (
+        host in ("bilibili.com", "b23.tv") or host.endswith(".bilibili.com")
+    ):
+        return _fetch_bilibili(target_url, raw_dir)
+    return fetch_mp4(target_url, raw_dir)
+
+
+def _fetch_bilibili(target_url: str, raw_dir: Path) -> tuple[Path, str]:
+    from yt_dlp import YoutubeDL
+    from yt_dlp.utils import DownloadError
+
+    options = {
+        "format": "bestaudio/best",
+        "noplaylist": True,
+        "playlist_items": "1",
+        "paths": {"home": str(raw_dir.resolve())},
+        "outtmpl": "bilibili.%(ext)s",
+        "quiet": True,
+        "no_warnings": True,
+        # yt-dlp can print the raw failure before raising DownloadError.
+        "logger": _QuietDownloadLogger(),
+    }
+    try:
+        with YoutubeDL(options) as downloader:
+            info = downloader.extract_info(target_url, download=True)
+            if info and info.get("_type") == "playlist":
+                info = next((entry for entry in info["entries"] if entry), None)
+            if info:
+                path = raw_dir / Path(downloader.prepare_filename(info)).name
+                if path.is_file() and path.stat().st_size:
+                    return path, info.get("title") or ""
+    except DownloadError:
+        pass
+    raise RuntimeError(
+        "B 站视频下载失败。请确认链接能在未登录时播放，并尝试更新 yt-dlp 后重试。"
+    )
+
+
+class _QuietDownloadLogger:
+    def debug(self, message):
+        pass
+
+    warning = error = debug
 
 
 def fetch_mp4(target_url: str, raw_dir: Path) -> tuple[Path, str]:

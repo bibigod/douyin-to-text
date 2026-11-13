@@ -42,8 +42,8 @@ python --version
 ```powershell
 git clone https://github.com/bibigod/douyin-to-text.git
 cd douyin-to-text
-pip install -e ".[ui]"
-playwright install chromium
+python -m pip install -e ".[ui]"
+python -m playwright install chromium
 ```
 
 四行的意思是：
@@ -55,6 +55,23 @@ playwright install chromium
 
 > 💡 没装 `git`？去 https://git-scm.com/download/win 下载安装一次（一路 Next 即可）。
 > 之后每次跑工具，都要先 `cd` 回到 `douyin-to-text` 这个文件夹再启动。
+
+### macOS 安装
+
+在终端执行下面的命令。若 `python3 --version` 找不到命令或低于 3.10，请先从 [python.org](https://www.python.org/downloads/macos/) 安装新版 Python。
+
+```bash
+python3 --version
+git clone https://github.com/bibigod/douyin-to-text.git
+cd douyin-to-text
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[ui]"
+python -m playwright install chromium
+```
+
+若之前遇到 `zsh: command not found: pip`，创建并激活环境后，使用上面的 `python -m pip`。
+以后打开新终端时，进入项目目录并重新执行 `source .venv/bin/activate`，再启动工具。
 
 ---
 
@@ -69,6 +86,9 @@ winget install Gyan.FFmpeg
 回车后会让你按 `Y` 同意协议，按一次就行。
 
 > Mac 用户：`brew install ffmpeg`
+
+安装后关闭并重新打开终端，再运行 `ffmpeg -version`。如果还是找不到命令，
+请把 `ffmpeg.exe` 所在目录加入 Windows 用户的 `Path`，再重开终端并重启工具。
 
 ---
 
@@ -96,12 +116,12 @@ douyin-to-text-ui
 回车之后：
 
 - 浏览器会自动打开 http://127.0.0.1:7860/
-- 看到一个干净的页面：① API Key  ② 抖音链接  ③ 开始转写
+- 看到一个干净的页面：① API Key  ② 视频链接  ③ 开始转写
 
 操作：
 
 1. ① 处粘贴你的 `sk-xxx` key（**只填这一次**，之后会自动记住）
-2. ② 处粘贴抖音视频链接：抖音 App 里打开视频 → 右下角分享 → 复制链接
+2. ② 处粘贴抖音或 B 站公开视频链接。B 站支持视频页链接和 `b23.tv` 短链接。
 3. ③ 点开始转写
 
 **等 30~90 秒**（按视频长度）：
@@ -135,6 +155,11 @@ douyin-to-text-ui
 
 抖音视频可能用了新的反爬手段。换一条视频试试；如果都不行，去
 [GitHub Issues](https://github.com/bibigod/douyin-to-text/issues) 提 bug 并附上失败的链接。
+
+### Q: 报错“找不到 FFmpeg”或“FFmpeg 转码失败”
+
+先在运行工具的终端执行 `ffmpeg -version`。若找不到命令，按第三步安装并重开终端。
+若 FFmpeg 能运行，请根据转码报错检查原视频是否能播放且有音轨，以及输出目录是否可写。
 
 ### Q: 报错 "DashScope ... 401 / Invalid API Key"
 

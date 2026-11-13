@@ -6,14 +6,46 @@ from pathlib import Path
 from dashscope.audio.asr import Recognition, RecognitionCallback, RecognitionResult
 
 
+# Only display known error phrases: stderr can include paths, URLs and media metadata.
+_FFMPEG_ERROR_PHRASES = (
+    "No such file or directory",
+    "Permission denied",
+    "No space left on device",
+    "Invalid data found when processing input",
+    "moov atom not found",
+    "Output file does not contain any stream",
+    "Unknown encoder 'libmp3lame'",
+    "Invalid argument",
+)
+
+
 def mp4_to_mp3(mp4: Path) -> Path:
-    """Extract 16kHz mono mp3 audio track via ffmpeg."""
+    """Extract 16kHz mono MP3 audio from a downloaded media file via FFmpeg."""
     mp3 = mp4.with_suffix(".mp3")
-    subprocess.run(
-        ["ffmpeg", "-y", "-i", str(mp4), "-vn", "-ar", "16000", "-ac", "1",
-         "-codec:a", "libmp3lame", "-q:a", "5", str(mp3)],
-        check=True, capture_output=True,
-    )
+    if mp4.suffix.lower() == ".mp3":
+        mp3 = mp4.with_suffix(".asr.mp3")
+    try:
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", str(mp4), "-vn", "-ar", "16000", "-ac", "1",
+             "-codec:a", "libmp3lame", "-q:a", "5", str(mp3)],
+            check=True, capture_output=True,
+        )
+    except FileNotFoundError:
+        raise RuntimeError(
+            "找不到 FFmpeg。请安装 FFmpeg，将其可执行文件所在目录加入 PATH，"
+            "重新打开终端并运行 ffmpeg -version，再重新启动本工具。"
+        ) from None
+    except subprocess.CalledProcessError as exc:
+        stderr = (exc.stderr or b"").decode("utf-8", errors="replace").lower()
+        details = "；".join(phrase for phrase in _FFMPEG_ERROR_PHRASES if phrase.lower() in stderr)
+        if not details:
+            details = "未识别到可安全显示的 FFmpeg 错误详情"
+        raise RuntimeError(
+            f"FFmpeg 转码失败（退出状态 {exc.returncode}）：{details}。"
+            "请确认下载的视频能播放且含有音轨，输出目录可写且磁盘空间充足，"
+            "并运行 ffmpeg -version 确认当前环境能找到 FFmpeg，"
+            "运行 ffmpeg -encoders 检查是否支持 libmp3lame。"
+        ) from None
     return mp3
 
 

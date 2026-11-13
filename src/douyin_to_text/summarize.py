@@ -9,7 +9,7 @@ from dashscope import Generation
 
 DEFAULT_MODEL = "qwen-plus"
 
-_PROMPT = """你是一个善于提炼短视频要点的助手。下面是一段抖音视频的口语逐句转写稿（含口误、重复、断句），请总结为以下结构的中文 Markdown：
+_PROMPT = """你是一个善于提炼视频要点的助手。下面是一段视频的口语逐句转写稿（含口误、重复、断句），请总结为以下结构的中文 Markdown：
 
 ## 一句话概括
 （不超过 30 字）

@@ -2,7 +2,7 @@
 
 # 🎬 douyin-to-text
 
-**抖音视频 → 中文文字稿，30 秒搞定。**
+**抖音 / B 站视频 → 中文文字稿。**
 
 中文短视频专用的本地化转写工具。基于阿里云 Qwen Paraformer，自带 LLM 一键总结。
 
@@ -14,6 +14,12 @@
 [**🚀 快速开始**](#-30-秒上手) · [**📖 零基础指南**](INSTALL.md) · [**🐛 反馈**](https://github.com/bibigod/douyin-to-text/issues)
 
 </div>
+
+**最近更新**
+
+- **B 站视频转写**：命令行和网页都支持公开视频页和 `b23.tv` 短链。
+- **macOS 安装**：通过虚拟环境和 `python -m pip` 安装，见 [安装指南](INSTALL.md#macos-安装)。
+- **FFmpeg 排查**：找不到 FFmpeg 时会提示如何安装和验证。转码失败时会显示退出状态和可安全展示的错误详情。
 
 <br />
 
@@ -47,11 +53,17 @@ $ douyin-to-text "https://v.douyin.com/xxx/" --summary
 ## 🚀 30 秒上手
 
 ```bash
-# 1. 克隆并安装（带 Web UI 版）
+# 1. 克隆项目
 git clone https://github.com/bibigod/douyin-to-text.git
 cd douyin-to-text
-pip install -e ".[ui]"
-playwright install chromium
+```
+
+macOS / Linux 先运行 `python3 -m venv .venv`，再运行 `source .venv/bin/activate`。
+Windows 请在 PowerShell 中直接运行下方命令。macOS / Linux 请在激活虚拟环境后运行：
+
+```bash
+python -m pip install -e ".[ui]"
+python -m playwright install chromium
 
 # 2. 拿一个免费 API Key：https://dashscope.aliyun.com/
 export DASHSCOPE_API_KEY=sk-xxxx       # macOS / Linux
@@ -61,7 +73,7 @@ $env:DASHSCOPE_API_KEY="sk-xxxx"       # Windows PowerShell
 douyin-to-text "https://v.douyin.com/xxx/" --summary
 ```
 
-> 🤓 **完全不懂编程？** 看这份手把手图文教程 → [INSTALL.md](INSTALL.md)
+运行前请先安装 FFmpeg，并在当前终端执行 `ffmpeg -version` 验证。分平台步骤见 [安装指南](INSTALL.md)。
 
 <br />
 
@@ -84,6 +96,10 @@ douyin-to-text-ui
 浏览器自动打开 http://127.0.0.1:7860/ → 粘贴链接 → 点开始 → 喝杯水回来就好了。
 
 API Key 填一次自动记住，下次免输。
+
+命令行和网页都接受 B 站公开视频页链接和 `b23.tv` 短链接。
+分 P 视频可用视频页的 `?p=2` 之类参数选择单个分 P。每次转写一个视频或分 P。
+使用 `--keep-media` 时，B 站会保留下载的原始音频（或含音轨的视频）及用于转写的 MP3。
 
 <br />
 

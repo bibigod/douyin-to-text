@@ -11,9 +11,9 @@ from douyin_to_text.pipeline import transcribe_url
 def main() -> int:
     parser = argparse.ArgumentParser(
         prog="douyin-to-text",
-        description="Transcribe a Douyin video to Chinese text via Qwen Paraformer.",
+        description="Transcribe a Douyin or Bilibili video via Qwen Paraformer.",
     )
-    parser.add_argument("url", help="a single Douyin share URL (batch not supported)")
+    parser.add_argument("url", help="a single Douyin or Bilibili video URL")
     parser.add_argument("--out", default="./transcripts", help="output directory")
     parser.add_argument(
         "--keep-media", action="store_true",

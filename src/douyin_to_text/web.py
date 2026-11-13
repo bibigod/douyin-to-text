@@ -20,15 +20,15 @@ from douyin_to_text.pipeline import transcribe_url
 
 
 DISCLAIMER = (
-    "> ⚠️ **仅供个人学习研究使用**。使用本工具时请遵守抖音用户协议、《著作权法》及相关法律法规。"
+    "> ⚠️ **仅供个人学习研究使用**。使用本工具时请遵守对应平台的用户协议、《著作权法》及相关法律法规。"
     "禁止用于商业用途、批量抓取或视频/转写文本的再分发。"
     "[查看完整免责声明](https://github.com/bibigod/douyin-to-text#%EF%B8%8F-免责声明--disclaimer)"
 )
 
-INITIAL_STATUS = "💤 等待输入：粘贴抖音链接 → 点 **开始转写**"
+INITIAL_STATUS = "💤 等待输入：粘贴抖音或 B 站视频链接 → 点 **开始转写**"
 
 STAGE_LABELS = {
-    "fetching": "📥 [1/3] 正在抓取视频（Playwright 启动中，约 10–15 秒）...",
+    "fetching": "📥 [1/3] 正在获取视频音频...",
     "transcribing": "🎙️ [2/3] 转写音频（Paraformer 流式，按视频长度约 30–60 秒）...",
     "summarizing": "🧠 [3/3] LLM 总结中（qwen-plus，约 5–10 秒）...",
 }
@@ -38,7 +38,7 @@ def _run(url: str, do_summary: bool, api_key: str, out_dir: str):
     """Generator yielding (status_md, transcript, summary_md)."""
     url = (url or "").strip()
     if not url:
-        yield "❌ 请先输入抖音链接", "", ""
+        yield "❌ 请先输入抖音或 B 站视频链接", "", ""
         return
 
     typed_key = (api_key or "").strip()
@@ -230,7 +230,7 @@ def build_app() -> gr.Blocks:
     ) as app:
         gr.Markdown(f"# 🎬 douyin-to-text  `v{__version__}`")
         gr.Markdown(
-            "**抖音视频 → 中文转写 + LLM 总结**（基于 Qwen Paraformer + qwen-plus）"
+            "**抖音 / B 站视频 → 中文转写 + LLM 总结**（基于 Qwen Paraformer + qwen-plus）"
         )
         gr.Markdown(DISCLAIMER)
 
@@ -251,8 +251,8 @@ def build_app() -> gr.Blocks:
 
         with gr.Row():
             url = gr.Textbox(
-                label="② 抖音链接",
-                placeholder="例如：https://v.douyin.com/lXW3WOHHokM/   （从抖音 App 分享 → 复制链接）",
+                label="② 视频链接",
+                placeholder="粘贴抖音分享链接、B 站视频页链接或 b23.tv 短链接",
                 scale=4,
             )
             run_btn = gr.Button("③ 开始转写", variant="primary", scale=1)

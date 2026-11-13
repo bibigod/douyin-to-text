@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from douyin_to_text.asr import mp4_to_mp3, transcribe_mp3
-from douyin_to_text.fetcher import fetch_mp4
+from douyin_to_text.fetcher import fetch_media
 from douyin_to_text.summarize import summarize_transcript
 
 
@@ -36,14 +36,14 @@ def transcribe_url(
     keep_media: bool = False,
     summarize: bool = False,
 ) -> TranscribeResult:
-    """Download a Douyin video, transcribe its audio, save as txt.
+    """Download media from Douyin or Bilibili, transcribe its audio, save as txt.
 
     By default the mp4/mp3 are deleted after transcription; only the text
     survives. Pass keep_media=True to retain raw media (your own copyright
     responsibility).
 
     Args:
-        url: a single Douyin share URL (batch is intentionally not supported).
+        url: a single Douyin or Bilibili video URL.
         out_dir: directory to write the readable .txt into.
         on_sentence: optional callback(str) for live sentence streaming.
         keep_media: if True, keep mp4/mp3 in raw_dir; default False (deleted).
@@ -61,9 +61,9 @@ def transcribe_url(
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     _stage("fetching")
-    mp4, page_title = fetch_mp4(url, raw_dir)
+    media, page_title = fetch_media(url, raw_dir)
     _stage("transcribing")
-    mp3 = mp4_to_mp3(mp4)
+    mp3 = mp4_to_mp3(media)
     text = transcribe_mp3(mp3, on_sentence=on_sentence)
 
     (raw_dir / "transcript.txt").write_text(text, encoding="utf-8")
@@ -71,7 +71,7 @@ def transcribe_url(
     (raw_dir / "page_title.txt").write_text(page_title, encoding="utf-8")
 
     if not keep_media:
-        for f in (mp4, mp3):
+        for f in (media, mp3):
             try:
                 f.unlink()
             except OSError:
