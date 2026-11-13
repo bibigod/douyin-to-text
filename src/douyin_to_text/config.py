@@ -9,7 +9,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 CONFIG_DIR = Path.home() / ".douyin-to-text"
 CONFIG_FILE = CONFIG_DIR / "config.json"
 
@@ -19,7 +18,7 @@ def load_config() -> dict:
         return {}
     try:
         return json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
-    except Exception:
+    except (OSError, UnicodeError, json.JSONDecodeError):
         return {}
 
 

@@ -11,9 +11,11 @@ from douyin_to_text.asr import mp4_to_mp3
     ("stderr", "detail"),
     [
         (
-            b"[in#0] Error opening input C:\\Users\\private-name\\video.mp4: "
-            b"Invalid data found when processing input\n"
-            b"comment: https://example.invalid/?token=private-token\xff",
+            (
+                b"[in#0] Error opening input C:\\Users\\private-name\\video.mp4: "
+                b"Invalid data found when processing input\n"
+                b"comment: https://example.invalid/?token=private-token\xff"
+            ),
             "Invalid data found when processing input",
         ),
         (b"unrecognized detail: private-token\xff", "未识别到可安全显示"),

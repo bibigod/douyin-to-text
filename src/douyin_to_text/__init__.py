@@ -4,4 +4,4 @@ __version__ = "0.4.0"
 
 from douyin_to_text.pipeline import transcribe_url
 
-__all__ = ["transcribe_url", "__version__"]
+__all__ = ["__version__", "transcribe_url"]

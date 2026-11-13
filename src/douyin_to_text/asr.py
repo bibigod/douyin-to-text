@@ -5,7 +5,6 @@ from pathlib import Path
 
 from dashscope.audio.asr import Recognition, RecognitionCallback, RecognitionResult
 
-
 # Only display known error phrases: stderr can include paths, URLs and media metadata.
 _FFMPEG_ERROR_PHRASES = (
     "No such file or directory",

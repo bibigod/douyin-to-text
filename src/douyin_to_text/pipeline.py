@@ -91,7 +91,7 @@ def transcribe_url(
             summary_path = out_path.with_suffix(".md")
             header = f"# {page_title}\n\n> 来源: {url}\n\n" if page_title else f"> 来源: {url}\n\n"
             summary_path.write_text(header + summary, encoding="utf-8")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - preserve the completed transcript.
             # transcription is the main deliverable — summary failure is non-fatal
             summary = f"(summary failed: {e})"
 

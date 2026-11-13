@@ -18,7 +18,6 @@ from douyin_to_text import __version__
 from douyin_to_text.config import CONFIG_FILE, get_saved_api_key, save_api_key
 from douyin_to_text.pipeline import transcribe_url
 
-
 DISCLAIMER = (
     "> ⚠️ **仅供个人学习研究使用**。使用本工具时请遵守对应平台的用户协议、《著作权法》及相关法律法规。"
     "禁止用于商业用途、批量抓取或视频/转写文本的再分发。"
@@ -48,7 +47,7 @@ def _run(url: str, do_summary: bool, api_key: str, out_dir: str):
         if get_saved_api_key() != typed_key:
             try:
                 save_api_key(typed_key)
-            except Exception:
+            except OSError:
                 pass
     elif get_saved_api_key():
         os.environ["DASHSCOPE_API_KEY"] = get_saved_api_key()
@@ -75,7 +74,7 @@ def _run(url: str, do_summary: bool, api_key: str, out_dir: str):
             holder["result"] = transcribe_url(
                 url, out_dir=out, summarize=do_summary, on_stage=on_stage,
             )
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - relay worker failures to the UI.
             holder["error"] = e
         finally:
             events.put(("done", None))
